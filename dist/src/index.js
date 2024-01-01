@@ -387,6 +387,35 @@ function tAfin(evt) {
     var imagenSal = new ImageType(pantalla1, imgLocal.getImage());
     imagenSal.imageArray2DtoData(pantalla2, MathImg.tAfin(imagenSal, factores));
 }
+// operaciones para proyecto final//
+function EfectoOpacidad(evt) {
+    var imagenSal = new ImageType(pantalla1, imgLocal.getImage());
+    // Pide al usuario que ingrese el nivel de opacidad
+    var opacidadString = prompt('Ingresa el nivel de opacidad (0.0 - 1.0):');
+    // Verifica que el nivel de opacidad sea válido
+    if (!opacidadString || isNaN(parseFloat(opacidadString)) || parseFloat(opacidadString) < 0 || parseFloat(opacidadString) > 1) {
+        alert('Ingresa un nivel de opacidad válido.');
+        return;
+    }
+    // Convierte el nivel de opacidad a número
+    var opacidad = parseFloat(opacidadString);
+    // Aplica la función con el nivel de opacidad proporcionado
+    imagenSal.imageArray2DtoData(pantalla2, MathImg.EfectoOpacidad(imagenSal.getArrayImg(), opacidad));
+}
+function EfectoRuedaDeColor(evt) {
+    var imagenSal = new ImageType(pantalla1, imgLocal.getImage());
+    // Pide al usuario que ingrese el desplazamiento de color
+    var desplazamientoString = prompt('Ingresa el desplazamiento de color:');
+    // Verifica que el desplazamiento de color sea válido
+    if (!desplazamientoString || isNaN(parseInt(desplazamientoString))) {
+        alert('Ingresa un desplazamiento de color válido.');
+        return;
+    }
+    // Convierte el desplazamiento de color a número
+    var desplazamiento = parseInt(desplazamientoString);
+    // Aplica la función con el desplazamiento de color proporcionado
+    imagenSal.imageArray2DtoData(pantalla2, MathImg.EfectoRuedaDeColor(imagenSal.getArrayImg(), desplazamiento));
+}
 lienzo1.addEventListener('mousemove', handleMouse);
 lienzo1.addEventListener("mousemove", imgLocal.drawSmallImg);
 document.getElementById('files').addEventListener('change', imgLocal.handleFileSelect, false);
@@ -452,3 +481,6 @@ document.getElementById("op-rotacion").addEventListener('click', rotarImagen2, f
 document.getElementById("op-shearingX").addEventListener('click', shearingX, false);
 document.getElementById("op-shearingY").addEventListener('click', shearingY, false);
 document.getElementById("op-afin").addEventListener('click', tAfin, false);
+//operaciones para proyecto //
+document.getElementById("EfectoOpacidad").addEventListener('click', EfectoOpacidad, false);
+document.getElementById("EfectoRuedaDeColor").addEventListener('click', EfectoRuedaDeColor, false);

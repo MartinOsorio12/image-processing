@@ -1232,4 +1232,50 @@ export class MathImg {
   */
     return sal;
   }
+
+
+  //nuevas operaciones para el proyecto final //
+
+
+  public static EfectoOpacidad(arrImage: number[][][], opacidad: number): number[][][] {
+    const width = arrImage[0][0].length;
+    const height = arrImage[0].length;
+    const sal = this.initArray(width, height);
+
+    // Aplica opacidad a cada píxel
+    for (let i = 0; i < height; i++) {
+        for (let j = 0; j < width; j++) {
+            // Reduce la opacidad y superpone sobre fondo blanco
+            sal[0][i][j] = Math.floor((1 - opacidad) * 255 + opacidad * arrImage[0][i][j]);
+            sal[1][i][j] = Math.floor((1 - opacidad) * 255 + opacidad * arrImage[1][i][j]);
+            sal[2][i][j] = Math.floor((1 - opacidad) * 255 + opacidad * arrImage[2][i][j]);
+        }
+    }
+
+    return sal;
+}
+
+
+public static EfectoRuedaDeColor(arrImage: number[][][], desplazamiento: number): number[][][] {
+  const width = arrImage[0][0].length;
+  const height = arrImage[0].length;
+  const sal = this.initArray(width, height);
+
+  // Aplica desplazamiento de color a cada píxel
+  for (let i = 0; i < height; i++) {
+      for (let j = 0; j < width; j++) {
+          // Desplaza los valores de color
+          sal[0][i][j] = (arrImage[0][i][j] + desplazamiento) % 256;
+          sal[1][i][j] = (arrImage[1][i][j] + desplazamiento) % 256;
+          sal[2][i][j] = (arrImage[2][i][j] + desplazamiento) % 256;
+      }
+  }
+
+  return sal;
+}
+
+
+
+
+
 }
