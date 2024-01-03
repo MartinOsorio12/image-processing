@@ -416,6 +416,24 @@ function EfectoRuedaDeColor(evt) {
     // Aplica la función con el desplazamiento de color proporcionado
     imagenSal.imageArray2DtoData(pantalla2, MathImg.EfectoRuedaDeColor(imagenSal.getArrayImg(), desplazamiento));
 }
+function BajaSaturacion() {
+    var imagenSal = new ImageType(pantalla1, imgLocal.getImage());
+    // Obtén el factor de baja saturación del usuario (puedes usar prompt o algún otro método)
+    var factor = parseFloat(prompt('Ingresa el factor de baja saturación:', '0.5')) || 0.5;
+    // Aplica la función de baja saturación
+    imagenSal.imageArray2DtoData(pantalla2, MathImg.bajaSaturacion(imagenSal.getArrayImg(), factor));
+}
+function combinarImagenesPorCanal(evt) {
+    var argss = prompt('Ingresa el valor de ponderación (entre 0 y 1):');
+    var ponderacion = parseFloat(argss);
+    if (isNaN(ponderacion) || ponderacion < 0 || ponderacion > 1) {
+        alert('Ingresa un valor de ponderación válido (entre 0 y 1).');
+        return;
+    }
+    var imagenSal = new ImageType(pantalla1, imgLocal.getImage());
+    var imagen2 = new ImageType(pantalla4, imgLocal4.getImage());
+    imagenSal.imageArray2DtoDataWithResizing(pantalla2, MathImg.combinarImagenesPorCanal(imagenSal, imagen2, ponderacion));
+}
 lienzo1.addEventListener('mousemove', handleMouse);
 lienzo1.addEventListener("mousemove", imgLocal.drawSmallImg);
 document.getElementById('files').addEventListener('change', imgLocal.handleFileSelect, false);
@@ -484,3 +502,4 @@ document.getElementById("op-afin").addEventListener('click', tAfin, false);
 //operaciones para proyecto //
 document.getElementById("EfectoOpacidad").addEventListener('click', EfectoOpacidad, false);
 document.getElementById("EfectoRuedaDeColor").addEventListener('click', EfectoRuedaDeColor, false);
+document.getElementById("combinarImagenesPorCanal").addEventListener('click', combinarImagenesPorCanal, false);

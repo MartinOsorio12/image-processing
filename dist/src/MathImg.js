@@ -1179,6 +1179,64 @@ var MathImg = /** @class */ (function () {
         }
         return sal;
     };
+    MathImg.Efectoinclinacion = function (arrImage, inclinacionX, inclinacionY) {
+        var width = arrImage[0][0].length;
+        var height = arrImage[0].length;
+        var sal = this.initArray(width, height);
+        for (var i = 0; i < height; i++) {
+            for (var j = 0; j < width; j++) {
+                // Calcula las coordenadas inclinadas
+                var x = j + inclinacionX * i;
+                var y = i + inclinacionY * j;
+                // Verifica si las coordenadas están dentro de la imagen original
+                if (x >= 0 && x < width && y >= 0 && y < height) {
+                    // Copia el color desde la posición inclinada
+                    sal[0][i][j] = arrImage[0][y][x];
+                    sal[1][i][j] = arrImage[1][y][x];
+                    sal[2][i][j] = arrImage[2][y][x];
+                }
+            }
+        }
+        return sal;
+    };
+    MathImg.bajaSaturacion = function (arrImage, factor) {
+        var width = arrImage[0][0].length;
+        var height = arrImage[0].length;
+        var sal = this.initArray(width, height);
+        for (var i = 0; i < height; i++) {
+            for (var j = 0; j < width; j++) {
+                // Calcula la intensidad del color en cada canal (R, G, B)
+                var intensidad = (arrImage[0][i][j] + arrImage[1][i][j] + arrImage[2][i][j]) / 3;
+                // Ajusta la saturación en función de la intensidad y del factor proporcionado
+                var nuevaSaturacion = arrImage[0][i][j] * (1 - factor) + intensidad * factor;
+                // Aplica la baja saturación a cada canal
+                sal[0][i][j] = nuevaSaturacion;
+                sal[1][i][j] = nuevaSaturacion;
+                sal[2][i][j] = nuevaSaturacion;
+            }
+        }
+        return sal;
+    };
+    MathImg.combinarImagenesPorCanal = function (imagen1, imagen2, ponderacion) {
+        // Obtener las dimensiones de las imágenes
+        var width = imagen1.getWidth();
+        var height = imagen1.getHeight();
+        // Obtener los arreglos 3D de ambas imágenes
+        var arrImage1 = imagen1.getArrayImg();
+        var arrImage2 = imagen2.getArrayImg();
+        // Inicializar el arreglo de salida con los colores combinados
+        var salida = this.initArray(width, height);
+        // Combinar las imágenes por canal con la ponderación especificada
+        for (var i = 0; i < height; i++) {
+            for (var j = 0; j < width; j++) {
+                // Combinar cada canal utilizando la ponderación
+                salida[0][i][j] = (1 - ponderacion) * arrImage1[0][i][j] + ponderacion * arrImage2[0][i][j];
+                salida[1][i][j] = (1 - ponderacion) * arrImage1[1][i][j] + ponderacion * arrImage2[1][i][j];
+                salida[2][i][j] = (1 - ponderacion) * arrImage1[2][i][j] + ponderacion * arrImage2[2][i][j];
+            }
+        }
+        return salida;
+    };
     return MathImg;
 }());
 export { MathImg };

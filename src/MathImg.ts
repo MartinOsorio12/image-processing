@@ -1274,6 +1274,83 @@ public static EfectoRuedaDeColor(arrImage: number[][][], desplazamiento: number)
   return sal;
 }
 
+public static Efectoinclinacion(arrImage: number[][][], inclinacionX: number, inclinacionY: number): number[][][] {
+  const width = arrImage[0][0].length;
+  const height = arrImage[0].length;
+  const sal = this.initArray(width, height);
+
+  for (let i = 0; i < height; i++) {
+    for (let j = 0; j < width; j++) {
+      // Calcula las coordenadas inclinadas
+      const x = j + inclinacionX * i;
+      const y = i + inclinacionY * j;
+
+      // Verifica si las coordenadas están dentro de la imagen original
+      if (x >= 0 && x < width && y >= 0 && y < height) {
+        // Copia el color desde la posición inclinada
+        sal[0][i][j] = arrImage[0][y][x];
+        sal[1][i][j] = arrImage[1][y][x];
+        sal[2][i][j] = arrImage[2][y][x];
+      }
+    }
+  }
+
+  return sal;
+}
+
+
+public static bajaSaturacion(arrImage: number[][][], factor: number): number[][][] {
+  const width = arrImage[0][0].length;
+  const height = arrImage[0].length;
+  const sal = this.initArray(width, height);
+
+  for (let i = 0; i < height; i++) {
+    for (let j = 0; j < width; j++) {
+      // Calcula la intensidad del color en cada canal (R, G, B)
+      const intensidad = (arrImage[0][i][j] + arrImage[1][i][j] + arrImage[2][i][j]) / 3;
+
+      // Ajusta la saturación en función de la intensidad y del factor proporcionado
+      const nuevaSaturacion = arrImage[0][i][j] * (1 - factor) + intensidad * factor;
+      
+      // Aplica la baja saturación a cada canal
+      sal[0][i][j] = nuevaSaturacion;
+      sal[1][i][j] = nuevaSaturacion;
+      sal[2][i][j] = nuevaSaturacion;
+    }
+  }
+
+  return sal;
+}
+
+
+
+
+public static combinarImagenesPorCanal(imagen1: ImageType, imagen2: ImageType, ponderacion: number): number[][][] {
+  // Obtener las dimensiones de las imágenes
+  const width = imagen1.getWidth();
+  const height = imagen1.getHeight();
+
+  // Obtener los arreglos 3D de ambas imágenes
+  const arrImage1 = imagen1.getArrayImg();
+  const arrImage2 = imagen2.getArrayImg();
+
+  // Inicializar el arreglo de salida con los colores combinados
+  const salida = this.initArray(width, height);
+
+  // Combinar las imágenes por canal con la ponderación especificada
+  for (let i = 0; i < height; i++) {
+      for (let j = 0; j < width; j++) {
+          // Combinar cada canal utilizando la ponderación
+          salida[0][i][j] = (1 - ponderacion) * arrImage1[0][i][j] + ponderacion * arrImage2[0][i][j];
+          salida[1][i][j] = (1 - ponderacion) * arrImage1[1][i][j] + ponderacion * arrImage2[1][i][j];
+          salida[2][i][j] = (1 - ponderacion) * arrImage1[2][i][j] + ponderacion * arrImage2[2][i][j];
+      }
+  }
+
+  return salida;
+}
+
+
 
 
 
