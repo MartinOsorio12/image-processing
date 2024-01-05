@@ -491,6 +491,30 @@ function combinarImagenesPorCanal(evt: any): void {
   imagenSal.imageArray2DtoDataWithResizing(pantalla2, MathImg.combinarImagenesPorCanal(imagenSal, imagen2, ponderacion));
 }
 
+
+function RecorteTriangular(evt: any): void {
+  const imagenSal: ImageType = new ImageType(pantalla1, imgLocal.getImage());
+  imagenSal.imageArray2DtoData(pantalla2, MathImg.recorteTriangular(imagenSal.getArrayImg()));
+}
+
+
+function RecorteOvalo(evt: any): void {
+  const imagenSal: ImageType = new ImageType(pantalla1, imgLocal.getImage());
+
+  // Aplica la función de recorte en forma de óvalo
+  imagenSal.imageArray2DtoData(pantalla2, MathImg.recorteOvalo(imagenSal.getArrayImg()));
+}
+
+
+
+
+
+
+
+
+
+
+
 lienzo1.addEventListener('mousemove', handleMouse);
  
 lienzo1.addEventListener("mousemove", imgLocal.drawSmallImg);
@@ -573,3 +597,5 @@ document.getElementById("op-afin").addEventListener('click', tAfin, false);
 document.getElementById("EfectoOpacidad").addEventListener('click', EfectoOpacidad, false);
 document.getElementById("EfectoRuedaDeColor").addEventListener('click', EfectoRuedaDeColor, false);
 document.getElementById("combinarImagenesPorCanal").addEventListener('click', combinarImagenesPorCanal, false);
+document.getElementById("RecorteTriangular").addEventListener('click', RecorteTriangular, false);
+document.getElementById("RecorteOvalo").addEventListener('click', RecorteOvalo);

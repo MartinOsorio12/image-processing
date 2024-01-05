@@ -1352,6 +1352,91 @@ public static combinarImagenesPorCanal(imagen1: ImageType, imagen2: ImageType, p
 
 
 
+public static recorteTriangular(arrImage: number[][][]): number[][][] {
+  const width = arrImage[0][0].length;
+  const height = arrImage[0].length;
+  const sal = this.initArray(width, height);
+
+  // Puntos del triángulo de recorte
+  const x1 = width / 4;
+  const y1 = height - height / 4;
+  const x2 = width - width / 4;
+  const y2 = height - height / 4;
+  const x3 = width / 2;
+  const y3 = height / 4;
+
+  // Función para verificar si un punto está dentro del triángulo
+  const dentroDelTriangulo = (x: number, y: number): boolean => {
+      const detT = (x1 - x3) * (y2 - y3) - (x2 - x3) * (y1 - y3);
+      const det1 = (x - x3) * (y2 - y3) - (x2 - x3) * (y - y3);
+      const det2 = (x1 - x3) * (y - y3) - (x - x3) * (y1 - y3);
+
+      const u = det1 / detT;
+      const v = det2 / detT;
+
+      return u >= 0 && v >= 0 && u + v <= 1;
+  };
+
+  // Aplicar el recorte triangular
+  for (let i = 0; i < height; i++) {
+      for (let j = 0; j < width; j++) {
+          if (dentroDelTriangulo(j, i)) {
+              sal[0][i][j] = arrImage[0][i][j];
+              sal[1][i][j] = arrImage[1][i][j];
+              sal[2][i][j] = arrImage[2][i][j];
+          } else {
+              sal[0][i][j] = 0;
+              sal[1][i][j] = 0;
+              sal[2][i][j] = 0;
+          }
+      }
+  }
+
+  return sal;
+}
+
+public static recorteOvalo(arrImage: number[][][]): number[][][] {
+  const width = arrImage[0][0].length;
+  const height = arrImage[0].length;
+  const sal = this.initArray(width, height);
+
+  // Centro del óvalo
+  const centerX = width / 2;
+  const centerY = height / 2;
+
+  // Semiejes del óvalo
+  const a = width / 3;
+  const b = height / 2;
+
+  // Función para verificar si un punto está dentro del óvalo
+  const dentroDelOvalo = (x: number, y: number): boolean => {
+      const distancia = Math.pow((x - centerX) / a, 2) + Math.pow((y - centerY) / b, 2);
+      return distancia <= 1;
+  };
+
+  // Aplicar el recorte ovalado
+  for (let i = 0; i < height; i++) {
+      for (let j = 0; j < width; j++) {
+          if (dentroDelOvalo(j, i)) {
+              sal[0][i][j] = arrImage[0][i][j];
+              sal[1][i][j] = arrImage[1][i][j];
+              sal[2][i][j] = arrImage[2][i][j];
+          } else {
+              sal[0][i][j] = 0;
+              sal[1][i][j] = 0;
+              sal[2][i][j] = 0;
+          }
+      }
+  }
+
+  return sal;
+}
+
+
+
+
+
+
 
 
 

@@ -1237,6 +1237,75 @@ var MathImg = /** @class */ (function () {
         }
         return salida;
     };
+    MathImg.recorteTriangular = function (arrImage) {
+        var width = arrImage[0][0].length;
+        var height = arrImage[0].length;
+        var sal = this.initArray(width, height);
+        // Puntos del triángulo de recorte
+        var x1 = width / 4;
+        var y1 = height - height / 4;
+        var x2 = width - width / 4;
+        var y2 = height - height / 4;
+        var x3 = width / 2;
+        var y3 = height / 4;
+        // Función para verificar si un punto está dentro del triángulo
+        var dentroDelTriangulo = function (x, y) {
+            var detT = (x1 - x3) * (y2 - y3) - (x2 - x3) * (y1 - y3);
+            var det1 = (x - x3) * (y2 - y3) - (x2 - x3) * (y - y3);
+            var det2 = (x1 - x3) * (y - y3) - (x - x3) * (y1 - y3);
+            var u = det1 / detT;
+            var v = det2 / detT;
+            return u >= 0 && v >= 0 && u + v <= 1;
+        };
+        // Aplicar el recorte triangular
+        for (var i = 0; i < height; i++) {
+            for (var j = 0; j < width; j++) {
+                if (dentroDelTriangulo(j, i)) {
+                    sal[0][i][j] = arrImage[0][i][j];
+                    sal[1][i][j] = arrImage[1][i][j];
+                    sal[2][i][j] = arrImage[2][i][j];
+                }
+                else {
+                    sal[0][i][j] = 0;
+                    sal[1][i][j] = 0;
+                    sal[2][i][j] = 0;
+                }
+            }
+        }
+        return sal;
+    };
+    MathImg.recorteOvalo = function (arrImage) {
+        var width = arrImage[0][0].length;
+        var height = arrImage[0].length;
+        var sal = this.initArray(width, height);
+        // Centro del óvalo
+        var centerX = width / 2;
+        var centerY = height / 2;
+        // Semiejes del óvalo
+        var a = width / 3;
+        var b = height / 2;
+        // Función para verificar si un punto está dentro del óvalo
+        var dentroDelOvalo = function (x, y) {
+            var distancia = Math.pow((x - centerX) / a, 2) + Math.pow((y - centerY) / b, 2);
+            return distancia <= 1;
+        };
+        // Aplicar el recorte ovalado
+        for (var i = 0; i < height; i++) {
+            for (var j = 0; j < width; j++) {
+                if (dentroDelOvalo(j, i)) {
+                    sal[0][i][j] = arrImage[0][i][j];
+                    sal[1][i][j] = arrImage[1][i][j];
+                    sal[2][i][j] = arrImage[2][i][j];
+                }
+                else {
+                    sal[0][i][j] = 0;
+                    sal[1][i][j] = 0;
+                    sal[2][i][j] = 0;
+                }
+            }
+        }
+        return sal;
+    };
     return MathImg;
 }());
 export { MathImg };
