@@ -505,12 +505,12 @@ function RecorteOvalo(evt: any): void {
   imagenSal.imageArray2DtoData(pantalla2, MathImg.recorteOvalo(imagenSal.getArrayImg()));
 }
 
+function Cuadrantes(evt: any): void {
+  const imagenSal: ImageType = new ImageType(pantalla1, imgLocal.getImage());
 
-
-
-
-
-
+  
+  imagenSal.imageArray2DtoData(pantalla2, MathImg.Cuadrantes(imagenSal.getArrayImg()));
+}
 
 
 
@@ -599,3 +599,5 @@ document.getElementById("EfectoRuedaDeColor").addEventListener('click', EfectoRu
 document.getElementById("combinarImagenesPorCanal").addEventListener('click', combinarImagenesPorCanal, false);
 document.getElementById("RecorteTriangular").addEventListener('click', RecorteTriangular, false);
 document.getElementById("RecorteOvalo").addEventListener('click', RecorteOvalo);
+
+document.getElementById("Cuadrantes").addEventListener('click',Cuadrantes);

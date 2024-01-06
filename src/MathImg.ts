@@ -1434,6 +1434,36 @@ public static recorteOvalo(arrImage: number[][][]): number[][][] {
 
 
 
+public static Cuadrantes (arrImage: number[][][]): number[][][] {
+  const width = arrImage[0][0].length;
+  const height = arrImage[0].length;
+  const sal = this.initArray(width, height);
+
+
+  const blockSize = 10;
+
+  for (let i = 0; i < height; i++) {
+      for (let j = 0; j < width; j++) {
+          const random = Math.random();
+
+          // Si es un borde de bloque, aplica un color aleatorio
+          if (i % blockSize === 0 || j % blockSize === 0) {
+              sal[0][i][j] = Math.floor(Math.random() * 256);
+              sal[1][i][j] = Math.floor(Math.random() * 256);
+              sal[2][i][j] = Math.floor(Math.random() * 256);
+          } else {
+              // Si no es un borde de bloque, mantiene el color original
+              sal[0][i][j] = arrImage[0][i][j];
+              sal[1][i][j] = arrImage[1][i][j];
+              sal[2][i][j] = arrImage[2][i][j];
+          }
+      }
+  }
+
+  return sal;
+}
+
+
 
 
 
