@@ -87,3 +87,54 @@ var ParticleText = /** @class */ (function () {
     return ParticleText;
 }());
 export { ParticleText };
+var Football = /** @class */ (function () {
+    function Football(x, y, size, ctx, color) {
+        this.x = x;
+        this.y = y;
+        this.size = size;
+        this.ctx = ctx;
+        this.velocityX = Math.random() * 2 - 1; // Velocidad horizontal aleatoria
+        this.velocityY = Math.random() * 2 - 1; // Velocidad vertical aleatoria
+        this.color = color;
+        this.panelColors = this.generatePanelColors();
+    }
+    Football.prototype.generatePanelColors = function () {
+        // Colores de los paneles (puedes personalizarlos según tus preferencias)
+        return ['#ffffff', '#000000']; // Blanco y negro para simular hexágonos y pentágonos
+    };
+    Football.prototype.update = function () {
+        this.x += this.velocityX;
+        this.y += this.velocityY;
+        // Rebote en los bordes
+        if (this.x + this.size > this.ctx.canvas.width || this.x - this.size < 0) {
+            this.velocityX *= -1;
+        }
+        if (this.y + this.size > this.ctx.canvas.height || this.y - this.size < 0) {
+            this.velocityY *= -1;
+        }
+    };
+    Football.prototype.draw = function () {
+        // Dibuja el contorno circular
+        this.ctx.strokeStyle = 'black'; // Color del contorno
+        this.ctx.lineWidth = 2; // Ancho del contorno
+        this.ctx.beginPath();
+        this.ctx.arc(this.x, this.y, this.size + this.ctx.lineWidth / 2, 0, Math.PI * 2);
+        this.ctx.closePath();
+        this.ctx.stroke();
+        // Dibuja los paneles hexagonales y pentagonales
+        var isHexagon = true;
+        for (var angle = 0; angle < Math.PI * 2; angle += (Math.PI * 2) / 6) {
+            var panelSize = isHexagon ? this.size : (this.size * Math.sqrt(3)) / 2; // Triángulo equilátero inscrito
+            var panelX = this.x + panelSize * Math.cos(angle);
+            var panelY = this.y + panelSize * Math.sin(angle);
+            this.ctx.fillStyle = this.panelColors[isHexagon ? 0 : 1];
+            this.ctx.beginPath();
+            this.ctx.arc(panelX, panelY, isHexagon ? this.size / 5 : this.size / 4, 0, Math.PI * 2);
+            this.ctx.closePath();
+            this.ctx.fill();
+            isHexagon = !isHexagon;
+        }
+    };
+    return Football;
+}());
+export { Football };

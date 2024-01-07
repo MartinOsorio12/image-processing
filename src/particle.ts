@@ -119,3 +119,70 @@ export class ParticleText {
   }
 
 }
+
+export class Football {
+  protected x: number;
+  protected y: number;
+  protected size: number;
+  protected ctx: CanvasRenderingContext2D;
+  protected velocityX: number;
+  protected velocityY: number;
+  protected color: string;
+  protected panelColors: string[];
+
+  constructor(x: number, y: number, size: number, ctx: CanvasRenderingContext2D, color: string) {
+    this.x = x;
+    this.y = y;
+    this.size = size;
+    this.ctx = ctx;
+    this.velocityX = Math.random() * 2 - 1; // Velocidad horizontal aleatoria
+    this.velocityY = Math.random() * 2 - 1; // Velocidad vertical aleatoria
+    this.color = color;
+    this.panelColors = this.generatePanelColors();
+  }
+
+  protected generatePanelColors(): string[] {
+    // Colores de los paneles (puedes personalizarlos según tus preferencias)
+    return ['#ffffff', '#000000']; // Blanco y negro para simular hexágonos y pentágonos
+  }
+
+  public update() {
+    this.x += this.velocityX;
+    this.y += this.velocityY;
+
+    // Rebote en los bordes
+    if (this.x + this.size > this.ctx.canvas.width || this.x - this.size < 0) {
+      this.velocityX *= -1;
+    }
+
+    if (this.y + this.size > this.ctx.canvas.height || this.y - this.size < 0) {
+      this.velocityY *= -1;
+    }
+  }
+
+  public draw() {
+    // Dibuja el contorno circular
+    this.ctx.strokeStyle = 'black'; // Color del contorno
+    this.ctx.lineWidth = 2; // Ancho del contorno
+    this.ctx.beginPath();
+    this.ctx.arc(this.x, this.y, this.size + this.ctx.lineWidth / 2, 0, Math.PI * 2);
+    this.ctx.closePath();
+    this.ctx.stroke();
+
+    // Dibuja los paneles hexagonales y pentagonales
+    let isHexagon = true;
+    for (let angle = 0; angle < Math.PI * 2; angle += (Math.PI * 2) / 6) {
+      const panelSize = isHexagon ? this.size : (this.size * Math.sqrt(3)) / 2; // Triángulo equilátero inscrito
+      const panelX = this.x + panelSize * Math.cos(angle);
+      const panelY = this.y + panelSize * Math.sin(angle);
+
+      this.ctx.fillStyle = this.panelColors[isHexagon ? 0 : 1];
+      this.ctx.beginPath();
+      this.ctx.arc(panelX, panelY, isHexagon ? this.size / 5 : this.size / 4, 0, Math.PI * 2);
+      this.ctx.closePath();
+      this.ctx.fill();
+
+      isHexagon = !isHexagon;
+    }
+  }
+}

@@ -3,6 +3,7 @@ import { ImageLocal } from "./ImageLocal.js";
 import { ImageType } from "./ImageType.js";
 import { MathImg } from "./MathImg.js";
 import { Particle } from "./particle.js";
+import { Football } from "./particle.js";
 import { ParticleText } from "./particle.js";
 import { CanvasLocal } from './canvasLocal.js';
 
@@ -216,6 +217,7 @@ const numberOfParticles = 1000;
 let particlesArray: Particle[];
 particlesArray = new Array(0);
 var imagenSal: ImageType;
+let football: Football;
 
 function init() {
   //init
@@ -308,6 +310,42 @@ function animateParticles(){
   }
   requestAnimationFrame(animateParticles);
 }
+
+
+/////logica para funcion de balon ///
+
+
+function initFootball() {
+  football = new Football(ctx.canvas.width / 2, ctx.canvas.height / 2, 30, ctx, 'white');
+}
+
+function animateFootball() {
+ 
+  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+  ctx.drawImage(imgLocal.getImage(), 0, 0, ctx.canvas.width, ctx.canvas.height);
+
+
+  football.update();
+  football.draw();
+
+  requestAnimationFrame(animateFootball);
+}
+
+
+function iniciarAnimacionFootball() {
+  initFootball();
+  animateFootball();
+}
+
+
+
+
+
+
+
+
+
 //seccion de histogramas  
 function histogramas(evt: any): void{
   const imagenSal: ImageType = new ImageType(pantalla1, imgLocal.getImage());
@@ -464,18 +502,6 @@ function EfectoRuedaDeColor(evt: any): void {
 }
 
 
-
-
-function BajaSaturacion() {
-  var imagenSal: ImageType = new ImageType(pantalla1, imgLocal.getImage());
-
-  // Obtén el factor de baja saturación del usuario (puedes usar prompt o algún otro método)
-  const factor = parseFloat(prompt('Ingresa el factor de baja saturación:', '0.5')) || 0.5;
-
-  // Aplica la función de baja saturación
-  imagenSal.imageArray2DtoData(pantalla2, MathImg.bajaSaturacion(imagenSal.getArrayImg(), factor));
-}
-
 function combinarImagenesPorCanal(evt: any): void {
   let argss = prompt('Ingresa el valor de ponderación (entre 0 y 1):');
   let ponderacion = parseFloat(argss);
@@ -599,5 +625,5 @@ document.getElementById("EfectoRuedaDeColor").addEventListener('click', EfectoRu
 document.getElementById("combinarImagenesPorCanal").addEventListener('click', combinarImagenesPorCanal, false);
 document.getElementById("RecorteTriangular").addEventListener('click', RecorteTriangular, false);
 document.getElementById("RecorteOvalo").addEventListener('click', RecorteOvalo);
-
 document.getElementById("Cuadrantes").addEventListener('click',Cuadrantes);
+document.getElementById("Football").addEventListener('click',iniciarAnimacionFootball);
