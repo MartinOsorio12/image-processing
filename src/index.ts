@@ -4,6 +4,7 @@ import { ImageType } from "./ImageType.js";
 import { MathImg } from "./MathImg.js";
 import { Particle } from "./particle.js";
 import { Football } from "./particle.js";
+import { VortexParticle} from "./particle.js";
 import { ParticleText } from "./particle.js";
 import { CanvasLocal } from './canvasLocal.js';
 
@@ -219,6 +220,8 @@ particlesArray = new Array(0);
 var imagenSal: ImageType;
 let football: Football;
 
+let vortexParticleArray: VortexParticle[] = [];
+
 function init() {
   //init
   var imagenSal: ImageType = new ImageType(pantalla1, imgLocal.getImage());
@@ -338,12 +341,39 @@ function iniciarAnimacionFootball() {
   animateFootball();
 }
 
+/////////// funcion para el vortice //
+
+function initVortexParticles() {
+  // Crea partículas en forma de espiral
+  for (let i = 0; i < 100; i++) {
+    let angle = i * 0.1;
+    let radius = i * 2;
+    let size = Math.random() * 3 + 1;
+    let angularSpeed = 0.02;
+    vortexParticleArray.push(new VortexParticle(0, 0, size, ctx, angle, radius, angularSpeed));
+  }
+}
 
 
+function animateVortexParticles() {
+
+  ctx.drawImage(imgLocal.getImage(), 0, 0, pantalla2.canvas.width, pantalla2.canvas.height);
+
+  
+  for (let i = 0; i < vortexParticleArray.length; i++) {
+    vortexParticleArray[i].update();
+    vortexParticleArray[i].draw();
+  }
+
+ 
+  requestAnimationFrame(animateVortexParticles);
+}
 
 
-
-
+function Vortice() {
+  initVortexParticles();
+  animateVortexParticles();
+}
 
 
 //seccion de histogramas  
@@ -627,3 +657,4 @@ document.getElementById("RecorteTriangular").addEventListener('click', RecorteTr
 document.getElementById("RecorteOvalo").addEventListener('click', RecorteOvalo);
 document.getElementById("Cuadrantes").addEventListener('click',Cuadrantes);
 document.getElementById("Football").addEventListener('click',iniciarAnimacionFootball);
+document.getElementById("EfectoVortice").addEventListener('click',Vortice);

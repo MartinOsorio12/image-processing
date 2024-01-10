@@ -3,6 +3,7 @@ import { ImageType } from "./ImageType.js";
 import { MathImg } from "./MathImg.js";
 import { Particle } from "./particle.js";
 import { Football } from "./particle.js";
+import { VortexParticle } from "./particle.js";
 import { ParticleText } from "./particle.js";
 import { CanvasLocal } from './canvasLocal.js';
 var lienzo1;
@@ -207,6 +208,7 @@ var particlesArray;
 particlesArray = new Array(0);
 var imagenSal;
 var football;
+var vortexParticleArray = [];
 function init() {
     //init
     var imagenSal = new ImageType(pantalla1, imgLocal.getImage());
@@ -302,6 +304,34 @@ function animateFootball() {
 function iniciarAnimacionFootball() {
     initFootball();
     animateFootball();
+}
+///////////
+function initVortexParticles() {
+    // Crea partículas en forma de espiral
+    for (var i = 0; i < 100; i++) {
+        var angle = i * 0.1;
+        var radius = i * 2;
+        var size = Math.random() * 3 + 1;
+        var angularSpeed = 0.02;
+        vortexParticleArray.push(new VortexParticle(0, 0, size, ctx, angle, radius, angularSpeed));
+    }
+}
+// Función de animación para el efecto de vórtice
+function animateVortexParticles() {
+    // Dibuja la imagen de fondo o la imagen original
+    ctx.drawImage(imgLocal.getImage(), 0, 0, pantalla2.canvas.width, pantalla2.canvas.height);
+    // Dibuja y actualiza cada partícula en forma de espiral
+    for (var i = 0; i < vortexParticleArray.length; i++) {
+        vortexParticleArray[i].update();
+        vortexParticleArray[i].draw();
+    }
+    // Llama a la animación de forma recursiva
+    requestAnimationFrame(animateVortexParticles);
+}
+// Llamada a las funciones de inicialización y animación del efecto de vórtice
+function Vortice() {
+    initVortexParticles();
+    animateVortexParticles();
 }
 //seccion de histogramas  
 function histogramas(evt) {
@@ -530,3 +560,4 @@ document.getElementById("RecorteTriangular").addEventListener('click', RecorteTr
 document.getElementById("RecorteOvalo").addEventListener('click', RecorteOvalo);
 document.getElementById("Cuadrantes").addEventListener('click', Cuadrantes);
 document.getElementById("Football").addEventListener('click', iniciarAnimacionFootball);
+document.getElementById("EfectoVortice").addEventListener('click', Vortice);

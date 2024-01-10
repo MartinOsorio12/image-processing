@@ -186,3 +186,39 @@ export class Football {
     }
   }
 }
+
+export class VortexParticle {
+  protected x: number;
+  protected y: number;
+  protected size: number;
+  protected ctx: CanvasRenderingContext2D;
+  protected angle: number;
+  protected radius: number;
+  protected angularSpeed: number;
+
+  constructor(x: number, y: number, size: number, ctx: CanvasRenderingContext2D, angle: number, radius: number, angularSpeed: number) {
+    this.x = x;
+    this.y = y;
+    this.size = size;
+    this.ctx = ctx;
+    this.angle = angle;
+    this.radius = radius;
+    this.angularSpeed = angularSpeed;
+  }
+
+  public update() {
+    // Actualiza el ángulo y la posición en función de la espiral
+    this.angle += this.angularSpeed;
+    this.x = this.radius * Math.cos(this.angle);
+    this.y = this.radius * Math.sin(this.angle);
+  }
+
+  public draw() {
+    // Dibuja una partícula en la posición actual de la espiral
+    this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+    this.ctx.beginPath();
+    this.ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    this.ctx.closePath();
+    this.ctx.fill();
+  }
+}

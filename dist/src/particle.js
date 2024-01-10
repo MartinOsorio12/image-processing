@@ -138,3 +138,30 @@ var Football = /** @class */ (function () {
     return Football;
 }());
 export { Football };
+var VortexParticle = /** @class */ (function () {
+    function VortexParticle(x, y, size, ctx, angle, radius, angularSpeed) {
+        this.x = x;
+        this.y = y;
+        this.size = size;
+        this.ctx = ctx;
+        this.angle = angle;
+        this.radius = radius;
+        this.angularSpeed = angularSpeed;
+    }
+    VortexParticle.prototype.update = function () {
+        // Actualiza el ángulo y la posición en función de la espiral
+        this.angle += this.angularSpeed;
+        this.x = this.radius * Math.cos(this.angle);
+        this.y = this.radius * Math.sin(this.angle);
+    };
+    VortexParticle.prototype.draw = function () {
+        // Dibuja una partícula en la posición actual de la espiral
+        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        this.ctx.beginPath();
+        this.ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        this.ctx.closePath();
+        this.ctx.fill();
+    };
+    return VortexParticle;
+}());
+export { VortexParticle };
