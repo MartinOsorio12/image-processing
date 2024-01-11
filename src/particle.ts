@@ -222,3 +222,52 @@ export class VortexParticle {
     this.ctx.fill();
   }
 }
+export class HexagonParticle {
+  public x: number;
+  public y: number;
+  public size: number;
+  protected ctx: CanvasRenderingContext2D;
+  public velocityX: number;
+  public velocityY: number;
+  protected color: string;
+
+  constructor(x: number, y: number, size: number, ctx: CanvasRenderingContext2D, color: string) {
+    this.x = x;
+    this.y = y;
+    this.size = size;
+    this.ctx = ctx;
+    this.velocityX = Math.random() * 2 - 1;
+    this.velocityY = Math.random() * 2 - 1;
+    this.color = color;
+  }
+
+  public update() {
+    this.x += this.velocityX;
+    this.y += this.velocityY;
+
+    // Rebote en los bordes
+    if (this.x + this.size > this.ctx.canvas.width || this.x - this.size < 0) {
+      this.velocityX *= -1;
+    }
+
+    if (this.y + this.size > this.ctx.canvas.height || this.y - this.size < 0) {
+      this.velocityY *= -1;
+    }
+  }
+
+  public draw() {
+    this.ctx.fillStyle = this.color;
+    this.ctx.beginPath();
+    this.drawHexagon(this.x, this.y, this.size);
+    this.ctx.closePath();
+    this.ctx.fill();
+  }
+
+  private drawHexagon(x: number, y: number, size: number) {
+    this.ctx.moveTo(x + size * Math.cos(0), y + size * Math.sin(0));
+
+    for (let i = 1; i < 6; i++) {
+      this.ctx.lineTo(x + size * Math.cos((i * 2 * Math.PI) / 6), y + size * Math.sin((i * 2 * Math.PI) / 6));
+    }
+  }
+}

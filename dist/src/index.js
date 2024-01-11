@@ -4,6 +4,7 @@ import { MathImg } from "./MathImg.js";
 import { Particle } from "./particle.js";
 import { Football } from "./particle.js";
 import { VortexParticle } from "./particle.js";
+import { HexagonParticle } from "./particle.js";
 import { ParticleText } from "./particle.js";
 import { CanvasLocal } from './canvasLocal.js';
 var lienzo1;
@@ -305,7 +306,7 @@ function iniciarAnimacionFootball() {
     initFootball();
     animateFootball();
 }
-///////////
+/////////// funcion para el vortice //
 function initVortexParticles() {
     // Crea partículas en forma de espiral
     for (var i = 0; i < 100; i++) {
@@ -316,22 +317,66 @@ function initVortexParticles() {
         vortexParticleArray.push(new VortexParticle(0, 0, size, ctx, angle, radius, angularSpeed));
     }
 }
-// Función de animación para el efecto de vórtice
 function animateVortexParticles() {
-    // Dibuja la imagen de fondo o la imagen original
     ctx.drawImage(imgLocal.getImage(), 0, 0, pantalla2.canvas.width, pantalla2.canvas.height);
-    // Dibuja y actualiza cada partícula en forma de espiral
     for (var i = 0; i < vortexParticleArray.length; i++) {
         vortexParticleArray[i].update();
         vortexParticleArray[i].draw();
     }
-    // Llama a la animación de forma recursiva
     requestAnimationFrame(animateVortexParticles);
 }
-// Llamada a las funciones de inicialización y animación del efecto de vórtice
 function Vortice() {
     initVortexParticles();
     animateVortexParticles();
+}
+//
+var hexagonParticles = [];
+var numberOfHexagonParticles = 20;
+function initHexagonParticles() {
+    for (var i = 0; i < 50; i++) {
+        var x = Math.random() * pantalla2.canvas.width;
+        var y = Math.random() * pantalla2.canvas.height;
+        var size = Math.random() * 20 + 10;
+        var color = getRandomColor();
+        hexagonParticles.push(new HexagonParticle(x, y, size, ctx, color));
+    }
+}
+// Función de animación
+function animateHexagonParticles() {
+    ctx.drawImage(imgLocal.getImage(), 0, 0, pantalla2.canvas.width, pantalla2.canvas.height);
+    for (var i = 0; i < hexagonParticles.length; i++) {
+        hexagonParticles[i].update();
+        hexagonParticles[i].draw();
+    }
+    checkCollisions();
+    requestAnimationFrame(animateHexagonParticles);
+}
+function checkCollisions() {
+    for (var i = 0; i < hexagonParticles.length - 1; i++) {
+        for (var j = i + 1; j < hexagonParticles.length; j++) {
+            var distance = Math.sqrt(Math.pow(hexagonParticles[i].x - hexagonParticles[j].x, 2) +
+                Math.pow(hexagonParticles[i].y - hexagonParticles[j].y, 2));
+            if (distance < hexagonParticles[i].size + hexagonParticles[j].size) {
+                hexagonParticles[i].velocityX *= -1;
+                hexagonParticles[i].velocityY *= -1;
+                hexagonParticles[j].velocityX *= -1;
+                hexagonParticles[j].velocityY *= -1;
+            }
+        }
+    }
+}
+function iniciarEfectoHexagonos() {
+    initHexagonParticles();
+    animateHexagonParticles();
+}
+// Función para generar un color aleatorio en formato hexadecimal
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
 }
 //seccion de histogramas  
 function histogramas(evt) {
@@ -561,3 +606,4 @@ document.getElementById("RecorteOvalo").addEventListener('click', RecorteOvalo);
 document.getElementById("Cuadrantes").addEventListener('click', Cuadrantes);
 document.getElementById("Football").addEventListener('click', iniciarAnimacionFootball);
 document.getElementById("EfectoVortice").addEventListener('click', Vortice);
+document.getElementById("Hexagono").addEventListener('click', iniciarEfectoHexagonos);
