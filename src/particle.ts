@@ -271,3 +271,43 @@ export class HexagonParticle {
     }
   }
 }
+
+export class AnimatedGhost {
+  protected x: number;
+  protected y: number;
+  protected size: number;
+  protected ctx: CanvasRenderingContext2D;
+  protected frame: number;
+
+  constructor(x: number, y: number, size: number, ctx: CanvasRenderingContext2D) {
+    this.x = x;
+    this.y = y;
+    this.size = size;
+    this.ctx = ctx;
+    this.frame = 0;
+  }
+
+  public update(mouseX: number, mouseY: number) {
+    // Actualiza las coordenadas del fantasma basándose en la posición del mouse
+    this.x = mouseX;
+    this.y = mouseY;
+    this.frame++;
+  }
+  public draw() {
+    // Dibuja el fantasma en una posición específica
+    this.ctx.fillStyle = 'white';
+    this.ctx.beginPath();
+    this.ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    this.ctx.closePath();
+    this.ctx.fill();
+
+    // Dibuja los ojos del fantasma
+    const eyeSize = this.size / 4;
+    this.ctx.fillStyle = 'black';
+    this.ctx.beginPath();
+    this.ctx.arc(this.x - eyeSize / 2, this.y - eyeSize, eyeSize, 0, Math.PI * 2);
+    this.ctx.arc(this.x + eyeSize / 2, this.y - eyeSize, eyeSize, 0, Math.PI * 2);
+    this.ctx.closePath();
+    this.ctx.fill();
+  }
+}

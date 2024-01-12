@@ -202,3 +202,36 @@ var HexagonParticle = /** @class */ (function () {
     return HexagonParticle;
 }());
 export { HexagonParticle };
+var AnimatedGhost = /** @class */ (function () {
+    function AnimatedGhost(x, y, size, ctx) {
+        this.x = x;
+        this.y = y;
+        this.size = size;
+        this.ctx = ctx;
+        this.frame = 0;
+    }
+    AnimatedGhost.prototype.update = function (mouseX, mouseY) {
+        // Actualiza las coordenadas del fantasma basándose en la posición del mouse
+        this.x = mouseX;
+        this.y = mouseY;
+        this.frame++;
+    };
+    AnimatedGhost.prototype.draw = function () {
+        // Dibuja el fantasma en una posición específica
+        this.ctx.fillStyle = 'white';
+        this.ctx.beginPath();
+        this.ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        this.ctx.closePath();
+        this.ctx.fill();
+        // Dibuja los ojos del fantasma
+        var eyeSize = this.size / 4;
+        this.ctx.fillStyle = 'black';
+        this.ctx.beginPath();
+        this.ctx.arc(this.x - eyeSize / 2, this.y - eyeSize, eyeSize, 0, Math.PI * 2);
+        this.ctx.arc(this.x + eyeSize / 2, this.y - eyeSize, eyeSize, 0, Math.PI * 2);
+        this.ctx.closePath();
+        this.ctx.fill();
+    };
+    return AnimatedGhost;
+}());
+export { AnimatedGhost };

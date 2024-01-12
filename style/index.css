@@ -13,19 +13,20 @@
 }
 
 .header{
-  width: 1600px;
+  width: 1000px;
   font-family: Arial, Helvetica, sans-serif;
   grid-area: header;
+  
 }
 
 ul{
   list-style: none;
 }
 .nav li span{
-  background-color: black;
-  color: white;
+  background-color: cadetblue;
+  color: black;
   text-decoration: none;
-  padding: 10px 15px;
+  padding: 10px 45px;
   display: block;
 }
 .nav li span:hover{

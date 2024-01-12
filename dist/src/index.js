@@ -6,6 +6,7 @@ import { Football } from "./particle.js";
 import { VortexParticle } from "./particle.js";
 import { HexagonParticle } from "./particle.js";
 import { ParticleText } from "./particle.js";
+import { AnimatedGhost } from "./particle.js";
 import { CanvasLocal } from './canvasLocal.js';
 var lienzo1;
 var lienzo2;
@@ -210,6 +211,7 @@ particlesArray = new Array(0);
 var imagenSal;
 var football;
 var vortexParticleArray = [];
+var ghost;
 function init() {
     //init
     var imagenSal = new ImageType(pantalla1, imgLocal.getImage());
@@ -257,11 +259,6 @@ var mouse = {
     y: null,
     radius: 50
 };
-function handleMouse(e) {
-    mouse.x = e.x; // - canvasPosition.left;
-    mouse.y = e.y; // - canvasPosition.top;
-    //console.log(mouse.x, mouse.y)
-}
 function textEfects(evt) {
     var args = prompt("Ingresa texto, tamaño de texto y coord x y y, separados por coma:");
     var factores = args.split(','); //.map(elem => parseInt(elem));
@@ -329,7 +326,7 @@ function Vortice() {
     initVortexParticles();
     animateVortexParticles();
 }
-//
+///// funcion para hexagonos //
 var hexagonParticles = [];
 var numberOfHexagonParticles = 20;
 function initHexagonParticles() {
@@ -341,7 +338,6 @@ function initHexagonParticles() {
         hexagonParticles.push(new HexagonParticle(x, y, size, ctx, color));
     }
 }
-// Función de animación
 function animateHexagonParticles() {
     ctx.drawImage(imgLocal.getImage(), 0, 0, pantalla2.canvas.width, pantalla2.canvas.height);
     for (var i = 0; i < hexagonParticles.length; i++) {
@@ -377,6 +373,33 @@ function getRandomColor() {
         color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
+}
+/// funcion para fantasma ////
+function initAnimatedGhost() {
+    var initialX = pantalla2.canvas.width / 2;
+    var initialY = pantalla2.canvas.height / 2;
+    var ghostSize = 30;
+    ghost = new AnimatedGhost(initialX, initialY, ghostSize, ctx);
+}
+function animateAnimatedGhost() {
+    ctx.drawImage(imgLocal.getImage(), 0, 0, pantalla2.canvas.width, pantalla2.canvas.height);
+    // Obtén las coordenadas del mouse
+    var mouseX = mouse.x || 0; // Asegúrate de tener un valor predeterminado
+    var mouseY = mouse.y || 0;
+    ghost.update(mouseX, mouseY);
+    ghost.draw();
+    requestAnimationFrame(animateAnimatedGhost);
+}
+// Event listener para manejar el movimiento del mouse
+pantalla2.canvas.addEventListener('mousemove', handleMouse);
+// Función para manejar el movimiento del mouse
+function handleMouse(e) {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+}
+function iniciarAnimacionFantasma() {
+    initAnimatedGhost();
+    animateAnimatedGhost();
 }
 //seccion de histogramas  
 function histogramas(evt) {
@@ -538,65 +561,6 @@ document.getElementById('files').addEventListener('change', imgLocal.handleFileS
 document.getElementById('files2').addEventListener('change', imgLocal4.handleFileSelect, false);
 dropZone.addEventListener('dragover', handleDragOver, false);
 dropZone.addEventListener('drop', imgLocal.handleFileSelect, false);
-//menu op basicas
-document.getElementById("op-gris").addEventListener('click', convertirAGris, false);
-document.getElementById("op-negativo").addEventListener('click', convertirANegativo, false);
-document.getElementById("op-neg-gris").addEventListener('click', convertirANegativoGrises, false);
-document.getElementById("op-rojo").addEventListener('click', convertirARojo, false);
-document.getElementById("op-verde").addEventListener('click', convertirAVerde, false);
-document.getElementById("op-azul").addEventListener('click', convertirAAzul, false);
-document.getElementById("op-tricolor").addEventListener('click', convertirTricolor, false);
-document.getElementById("op-gamma").addEventListener('click', correccionGamma, false);
-document.getElementById("op-umbral1").addEventListener('click', umbralizado, false);
-document.getElementById("op-umbral-2-limites").addEventListener('click', umbral2limites, false);
-document.getElementById("op-desfaseX").addEventListener('click', desfaseX, false);
-document.getElementById("op-desfaseY").addEventListener('click', desfaseY, false);
-document.getElementById("op-desfaseD").addEventListener('click', desfaseD, false);
-//menu op. edicion
-document.getElementById("op-brillo").addEventListener('click', changeBrightness, false);
-document.getElementById("op-ftrans").addEventListener('click', cambioFtransferencia, false);
-document.getElementById("op-gradienteX").addEventListener('click', colorGradienteX, false);
-document.getElementById("op-gradienteY").addEventListener('click', colorGradienteY, false);
-document.getElementById("op-contraste").addEventListener('click', opchangeContraste, false);
-document.getElementById("op-falsocolor").addEventListener('click', opchangeFalsoColor, false);
-//op matematicas
-document.getElementById("op-pow").addEventListener('click', opgetPow, false);
-document.getElementById("op-sqrt").addEventListener('click', sqrt, false);
-document.getElementById("op-sine").addEventListener('click', funcionSine, false);
-document.getElementById("op-cos").addEventListener('click', coseno, false);
-document.getElementById("op-tan").addEventListener('click', tan, false);
-document.getElementById("op-add").addEventListener('click', add, false);
-document.getElementById("op-subtract").addEventListener('click', subtract, false);
-document.getElementById("op-multiplicacion").addEventListener('click', multiplicacion, false);
-document.getElementById("op-div").addEventListener('click', div, false);
-//op con imagenes compuestas
-document.getElementById("op-addimg").addEventListener('click', sumaImg, false);
-document.getElementById("op-marca-agua-centro").addEventListener('click', marcaAguaCentro, false);
-document.getElementById("op-marca-agua-array").addEventListener('click', marcaAguaArray, false);
-//op con efectos
-document.getElementById("op-rain").addEventListener('click', rain, false);
-document.getElementById("op-rain2").addEventListener('click', rain2, false);
-//op con texto.
-document.getElementById("op-text").addEventListener('click', textEfects, false);
-//histogramas
-document.getElementById("op-hist").addEventListener('click', histogramas, false);
-document.getElementById("op-ecualizar").addEventListener('click', ecualizado, false);
-//mortfologia
-document.getElementById("op-eros").addEventListener('click', erosionarImg, false);
-document.getElementById("op-dila").addEventListener('click', dilatarImg, false);
-document.getElementById("op-aper").addEventListener('click', aperturaImg, false);
-document.getElementById("op-cier").addEventListener('click', cierreImg, false);
-//operacion con imagenes siteticas
-document.getElementById("op-pulso").addEventListener('click', generarPulso, false);
-document.getElementById("op-ruido").addEventListener('click', generarRuido, false);
-document.getElementById("op-rampax").addEventListener('click', generarRampaX, false);
-document.getElementById("op-rampay").addEventListener('click', generarRampaY, false);
-//operaciones geometricas
-document.getElementById("op-escalamiento").addEventListener('click', escalarImagen2, false);
-document.getElementById("op-rotacion").addEventListener('click', rotarImagen2, false);
-document.getElementById("op-shearingX").addEventListener('click', shearingX, false);
-document.getElementById("op-shearingY").addEventListener('click', shearingY, false);
-document.getElementById("op-afin").addEventListener('click', tAfin, false);
 //operaciones para proyecto //
 document.getElementById("EfectoOpacidad").addEventListener('click', EfectoOpacidad, false);
 document.getElementById("EfectoRuedaDeColor").addEventListener('click', EfectoRuedaDeColor, false);
@@ -607,3 +571,4 @@ document.getElementById("Cuadrantes").addEventListener('click', Cuadrantes);
 document.getElementById("Football").addEventListener('click', iniciarAnimacionFootball);
 document.getElementById("EfectoVortice").addEventListener('click', Vortice);
 document.getElementById("Hexagono").addEventListener('click', iniciarEfectoHexagonos);
+document.getElementById("Fantasma").addEventListener('click', iniciarAnimacionFantasma);
